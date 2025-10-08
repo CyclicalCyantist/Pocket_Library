@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.ListAdapter
 
 class ItemAdapter(
     private val context: Context,
-    private val onFavouriteClick: (Item) -> Unit,
-    private val onItemClick: (Item) -> Unit
-) : ListAdapter<Item, ItemAdapter.ItemViewHolder>(ItemDiffCallback()) {
+    private val onItemClick: (Book) -> Unit
+) : ListAdapter<Book, ItemAdapter.ItemViewHolder>(ItemDiffCallback()) {
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textName: TextView = view.findViewById(R.id.textName)
-        val textCategory: TextView = view.findViewById(R.id.textCategory)
+        val textTitle: TextView = view.findViewById(R.id.textName)
+        val textAuthor: TextView = view.findViewById(R.id.textCategory)
         val itemImage: ImageView = view.findViewById(R.id.itemImage)
         val btnFav: ImageButton = view.findViewById(R.id.btnFav)
     }
@@ -30,24 +29,13 @@ class ItemAdapter(
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = getItem(position)
+        val book = getItem(position)
 
-        holder.textName.text = item.name
-        holder.textCategory.text = item.category.toString()
-        holder.itemImage.setImageResource(item.imageSrc)
-
-        if (item.isFavourite) {
-            holder.btnFav.setImageResource(R.drawable.one_star_icon)
-        } else {
-            holder.btnFav.setImageResource(R.drawable.one_star_outline_icon)
-        }
-
-        holder.btnFav.setOnClickListener {
-            onFavouriteClick(item)
-        }
-
+        holder.textTitle.text = book.title
+        holder.textAuthor.text = book.author
+        
         holder.itemView.setOnClickListener {
-            onItemClick(item)
+            onItemClick(book)
         }
     }
 }

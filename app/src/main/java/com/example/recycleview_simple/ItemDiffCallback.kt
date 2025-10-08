@@ -2,13 +2,13 @@ package com.example.recycleview_simple
 
 import androidx.recyclerview.widget.DiffUtil
 
-class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
-    override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+class ItemDiffCallback : DiffUtil.ItemCallback<Book>() {
+    override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
 
-        return oldItem.name == newItem.name
+        return oldItem.title == newItem.title
     }
 
-    override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+    override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
 
         return oldItem == newItem
     }

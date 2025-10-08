@@ -1,10 +1,13 @@
 package com.example.recycleview_simple
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "books")
+@Parcelize
 data class Book(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
@@ -17,4 +20,4 @@ data class Book(
 
     @ColumnInfo(name = "book_publication_year")
     val year: Int
-)
+): Parcelable

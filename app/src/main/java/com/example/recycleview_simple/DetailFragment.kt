@@ -30,33 +30,33 @@ class DetailFragment : Fragment() {
         val favBtn = view.findViewById<ImageButton>(R.id.btnFav)
         val backBtn = view.findViewById<ImageButton>(R.id.backBtn)
 
-        vm.selectedItemId.observe(viewLifecycleOwner) {
-            vm.getSelectedItem()?.let { item ->
-                imageView.setImageResource(item.imageBackground)
-                itemName.text = item.name
-                desc.text = item.description
-                favBtn.setImageResource(
-                    if (item.isFavourite) R.drawable.one_star_icon2
-                    else R.drawable.one_star_outline_icon2
-                )
-            }
-        }
-
-        favBtn.setOnClickListener {
-            vm.getSelectedItem()?.let { item ->
-                vm.toggleFav(item)
-            }
-            vm.getSelectedItem()?.let { item ->
-                favBtn.setImageResource(
-                    if (item.isFavourite) R.drawable.one_star_icon2
-                    else R.drawable.one_star_outline_icon2
-                )
-            }
-        }
-
-        backBtn.setOnClickListener {
-            vm.clearCurrentItem()
-            parentFragmentManager.popBackStack()
-        }
+//        vm.selectedItemId.observe(viewLifecycleOwner) {
+//            vm.getSelectedItem()?.let { item ->
+//                imageView.setImageResource(item.imageBackground)
+//                itemName.text = item.name
+//                desc.text = item.description
+//                favBtn.setImageResource(
+//                    if (item.isFavourite) R.drawable.one_star_icon2
+//                    else R.drawable.one_star_outline_icon2
+//                )
+//            }
+//        }
+//
+//        favBtn.setOnClickListener {
+//            vm.getSelectedItem()?.let { item ->
+//                vm.toggleFav(item)
+//            }
+//            vm.getSelectedItem()?.let { item ->
+//                favBtn.setImageResource(
+//                    if (item.isFavourite) R.drawable.one_star_icon2
+//                    else R.drawable.one_star_outline_icon2
+//                )
+//            }
+//        }
+//
+//        backBtn.setOnClickListener {
+//            vm.clearCurrentItem()
+//            parentFragmentManager.popBackStack()
+//        }
     }
 }

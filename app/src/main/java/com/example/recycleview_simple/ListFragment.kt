@@ -25,13 +25,12 @@ class ListFragment : Fragment() {
 
         adapter = ItemAdapter(
             view.context,
-            onItemClick = { item ->
-                vm.setCurrentItem(item.id)
-            },
-            onFavouriteClick = { vm.toggleFav(it) }
+            onItemClick = { book ->
+                vm.setCurrentItem(book.id)
+            }
         )
         rv.adapter = adapter
 
-        vm.filteredItems.observe(viewLifecycleOwner) { adapter.submitList(it) }
+        vm.filteredBooks.observe(viewLifecycleOwner) { adapter.submitList(it) }
     }
 }
