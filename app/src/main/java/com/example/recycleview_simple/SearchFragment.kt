@@ -23,48 +23,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
-        val spinner: Spinner = view.findViewById(R.id.categorySpinner)
-
-        // Converting to Sort By
-        val categories = emptyList<String>()
-
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            categories
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        spinner.adapter = adapter
-
-        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedCategory = categories[position]
-                vm.filterByCategory(selectedCategory)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-
-        val searchView: SearchView = view.findViewById(R.id.searchView)
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                vm.search(query.orEmpty())
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                vm.search(newText.orEmpty())
-                return true
-            }
-        })
-
         return view
     }
 }

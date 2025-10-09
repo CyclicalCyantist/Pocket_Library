@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.search_container, SearchFragment())
                 .replace(R.id.list_container, ListFragment())
                 .commit()
         }
