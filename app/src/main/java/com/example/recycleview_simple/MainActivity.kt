@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
-    private val vm: BookViewModel by viewModels() {
+    private val vm: BookViewModel by viewModels {
         BookViewModelFactory(AppDatabase.getDatabase(this).bookDao())
     }
 
@@ -55,11 +55,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun render() {
         val rightPane = findViewById<View?>(R.id.rightPane)
-        val search = findViewById<View?>(R.id.search_container)
         val hasSelection = vm.getSelectedItem() != null
 
         if (rightPane != null) {
-            search?.visibility = View.VISIBLE
             replaceIfNeeded(R.id.list_container, ListFragment::class.java)
 
             if (hasSelection) {
@@ -71,10 +69,8 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             if (hasSelection) {
-                search?.visibility = View.GONE
                 replaceIfNeeded(R.id.list_container, DetailFragment::class.java, addToBackStack = false)
             } else {
-                search?.visibility = View.VISIBLE
                 replaceIfNeeded(R.id.list_container, ListFragment::class.java, addToBackStack = false)
             }
         }

@@ -53,10 +53,10 @@ class DetailFragment : Fragment() {
 //                )
 //            }
 //        }
-//
-//        backBtn.setOnClickListener {
-//            vm.clearCurrentItem()
-//            parentFragmentManager.popBackStack()
-//        }
+
+        backBtn.setOnClickListener {
+            vm.clearCurrentItem()
+            parentFragmentManager.popBackStack()
+        }
     }
 }
