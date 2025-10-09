@@ -1,16 +1,11 @@
 package com.example.recycleview_simple
 
-import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 
-class ItemViewModel(private val bookDao: BookDAO) : ViewModel() {
+class BookViewModel(private val bookDao: BookDAO) : ViewModel() {
 
     // Connect to database
 //    val books: LiveData<List<Book>> = bookDao.getAllBooks().asLiveData()
@@ -24,14 +19,12 @@ class ItemViewModel(private val bookDao: BookDAO) : ViewModel() {
         )
     )
 
-    var currentCategory: ItemCategories = ItemCategories.ALL
     var currentQuery: String = ""
 
     private val _filteredBooks = MediatorLiveData<List<Book>>().apply {
         addSource(books) { applyFilters() }
     }
     val filteredBooks: LiveData<List<Book>> = _filteredBooks
-
 
     private val _selectedItemId = MutableLiveData<Long?>()
     val selectedItemId: LiveData<Long?> = _selectedItemId
@@ -46,11 +39,6 @@ class ItemViewModel(private val bookDao: BookDAO) : ViewModel() {
 
     fun getSelectedItem(): Book? {
         return books.value?.find { it.id == _selectedItemId.value }
-    }
-
-    fun filterByCategory(category: ItemCategories) {
-        currentCategory = category
-        applyFilters()
     }
 
     fun search(query: String) {

@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 
 class DetailFragment : Fragment() {
-    private val vm: ItemViewModel by activityViewModels()
+    private val vm: BookViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

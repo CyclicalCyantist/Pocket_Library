@@ -13,7 +13,7 @@ import androidx.fragment.app.activityViewModels
 import kotlin.getValue
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
-    private val vm: ItemViewModel by activityViewModels()
+    private val vm: BookViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +25,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         val spinner: Spinner = view.findViewById(R.id.categorySpinner)
 
-        val categories = ItemCategories.entries.toTypedArray()
+        // Converting to Sort By
+        val categories = emptyList<String>()
 
         val adapter = ArrayAdapter(
             requireContext(),

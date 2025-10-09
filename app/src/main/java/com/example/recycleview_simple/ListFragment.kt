@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class ListFragment : Fragment() {
-    private val vm: ItemViewModel by activityViewModels()
-    private lateinit var adapter: ItemAdapter
+    private val vm: BookViewModel by activityViewModels()
+    private lateinit var adapter: BookAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +23,7 @@ class ListFragment : Fragment() {
         val rv = view.findViewById<RecyclerView>(R.id.recyclerView)
         rv.layoutManager = GridLayoutManager(requireContext(), 1)
 
-        adapter = ItemAdapter(
+        adapter = BookAdapter(
             view.context,
             onItemClick = { book ->
                 vm.setCurrentItem(book.id)

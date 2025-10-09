@@ -8,16 +8,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    private val vm: ItemViewModel by viewModels() {
-        ItemViewModelFactory(AppDatabase.getDatabase(this).bookDao())
+    private val vm: BookViewModel by viewModels() {
+        BookViewModelFactory(AppDatabase.getDatabase(this).bookDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

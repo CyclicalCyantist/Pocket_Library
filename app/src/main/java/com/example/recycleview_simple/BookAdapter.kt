@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
 
-class ItemAdapter(
+class BookAdapter(
     private val context: Context,
     private val onItemClick: (Book) -> Unit
-) : ListAdapter<Book, ItemAdapter.ItemViewHolder>(ItemDiffCallback()) {
+) : ListAdapter<Book, BookAdapter.ItemViewHolder>(BookDiffCallback()) {
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textTitle: TextView = view.findViewById(R.id.textName)
         val textAuthor: TextView = view.findViewById(R.id.textCategory)
