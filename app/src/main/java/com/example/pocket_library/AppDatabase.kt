@@ -1,4 +1,4 @@
-package com.example.recycleview_simple
+package com.example.pocket_library
 
 import android.content.Context
 import androidx.room.Database
@@ -14,14 +14,14 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         // 2. Singleton instance
         @Volatile
-        private var INSTANCE: com.example.recycleview_simple.AppDatabase? = null
+        private var INSTANCE: com.example.pocket_library.AppDatabase? = null
 
         // 3. Builder function
-        fun getDatabase(context: Context): com.example.recycleview_simple.AppDatabase {
+        fun getDatabase(context: Context): com.example.pocket_library.AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    com.example.recycleview_simple.AppDatabase::class.java,
+                    com.example.pocket_library.AppDatabase::class.java,
                     "book_database" // 4. Database file name
                 ).build()
                 INSTANCE = instance

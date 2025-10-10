@@ -1,4 +1,4 @@
-package com.example.recycleview_simple
+package com.example.pocket_library
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

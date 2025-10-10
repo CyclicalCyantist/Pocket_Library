@@ -1,4 +1,4 @@
-package com.example.recycleview_simple
+package com.example.pocket_library
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

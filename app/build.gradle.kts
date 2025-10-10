@@ -3,14 +3,16 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
+
 }
 
 android {
-    namespace = "com.example.recycleview_simple"
+    namespace = "com.example.pocket_library"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.recycleview_simple"
+        applicationId = "com.example.pocket_library"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -64,4 +66,10 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
+
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    // https://firebase.google.com/docs/android/setup#available-libraries
 }

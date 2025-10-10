@@ -1,4 +1,4 @@
-package com.example.recycleview_simple
+package com.example.pocket_library
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -15,7 +15,9 @@ class BookViewModel(private val bookDao: BookDAO) : ViewModel() {
         Book(title = "Hitchhiker's Guide to the Galaxy", author = "Neil Gaiman", year = 1979),
         Book(title = "Pride & Prejudice", author = "Jane Austen", year = 1813),
         Book(title = "Of Mice and Men", author = "John Steinbeck", year = 1937),
-        Book(title = "Metamorphosis", author = "Franz Kafka", year = 1915)
+        Book(title = "Metamorphosis", author = "Franz Kafka", year = 1915),
+        Book(title = "Babel", author = "R.F. Kuang", year = 2022),
+        Book(title = "Atomic Habits", author = "James Clear", year = 2018)
         )
     )
 

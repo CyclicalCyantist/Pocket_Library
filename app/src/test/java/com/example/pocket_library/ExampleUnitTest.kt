@@ -1,4 +1,4 @@
-package com.example.recycleview_simple
+package com.example.pocket_library
 
 import org.junit.Test
 
