@@ -2,6 +2,7 @@ package com.example.recycleview_simple
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        // Inset spacing
         findViewById<View?>(R.id.root)?.let { root ->
             ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
                 val sb = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -27,9 +29,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Load initial list fragment
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.list_container, ListFragment())
+                .commit()
+        }
+
+        // Menu navigation
+        val collectionButton = findViewById<Button>(R.id.collection_button)
+        val libraryButton = findViewById<Button>(R.id.library_button)
+
+        collectionButton.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.list_container, ListFragment())
+                .commit()
+        }
+
+        libraryButton.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.list_container, SearchFragment())
                 .commit()
         }
 

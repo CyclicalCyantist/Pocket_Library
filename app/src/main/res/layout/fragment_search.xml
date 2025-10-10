@@ -18,15 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:iconifiedByDefault="false"
-            app:queryHint="Search for Foods..."
+            app:queryHint="Search by title or author..."
             app:searchIcon="@drawable/baseline_search_24" />
-
-        <Spinner
-            android:id="@+id/categorySpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:pointerIcon="crosshair" />
 
     </LinearLayout>
 
