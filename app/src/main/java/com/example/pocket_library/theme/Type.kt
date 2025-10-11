@@ -1,4 +1,4 @@
-package com.example.network_call.ui.theme
+package com.example.pocket_library.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

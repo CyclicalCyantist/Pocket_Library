@@ -1,21 +1,17 @@
-package com.example.network_call
+package com.example.pocket_library
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.max
 
 @Composable
 @Preview
@@ -29,7 +25,7 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
             label = { Text("Search Library") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            keyboardActions = androidx.compose.foundation.text.KeyboardActions(
+            keyboardActions = KeyboardActions(
                 onSearch = { vm.search() })
         )
 

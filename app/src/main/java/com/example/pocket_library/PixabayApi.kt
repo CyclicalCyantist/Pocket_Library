@@ -1,4 +1,4 @@
-package com.example.network_call
+package com.example.pocket_library
 
 import retrofit2.http.GET
 import retrofit2.http.Query

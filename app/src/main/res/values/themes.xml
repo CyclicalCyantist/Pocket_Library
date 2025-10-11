@@ -8,9 +8,9 @@
         <item name="cornerSize">16dp</item>
     </style>
 
-    <style name="Theme.RecycleViewSimple" parent="Base.Theme.RecycleViewSimple" />
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="Theme.NetworkCall" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.RecycleViewSimple" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your theme colors -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorSecondary">@color/teal_200</item>
+    </style>
 </resources>

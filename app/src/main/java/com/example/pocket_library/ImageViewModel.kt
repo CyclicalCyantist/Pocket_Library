@@ -1,4 +1,4 @@
-package com.example.network_call
+package com.example.pocket_library
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

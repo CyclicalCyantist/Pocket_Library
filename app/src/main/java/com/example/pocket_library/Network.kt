@@ -1,4 +1,4 @@
-package com.example.network_call
+package com.example.pocket_library
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
