@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
-import android.graphics.Bitmap
 
 @Entity(tableName = "books")
 @Parcelize
@@ -20,8 +19,5 @@ data class Book(
     val author: String,
 
     @ColumnInfo(name = "book_publication_year")
-    val year: Int,
-
-    //@ColumnInfo(name = "book_photo")
-    //val photo: Bitmap
+    val year: Int
 ): Parcelable

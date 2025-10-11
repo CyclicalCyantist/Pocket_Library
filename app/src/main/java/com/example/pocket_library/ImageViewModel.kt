@@ -42,9 +42,19 @@ class ImageViewModel : ViewModel() {
         viewModelScope.launch {
             _state.value = _state.value.copy(loading = true, error = null)
             try {
-                val resp = Network.api.searchBooks(
-                    query = q,
+                val validTitles = Network.api.searchBooksByTitle(
+                    title = q,
+                    //author = q,
                     perPage = 30
+                )
+                val validAuthors = Network.api.searchBooks(
+                    author = q,
+                    //title = q,
+                    perPage = 30
+                )
+                val resp = LibraryResponse(
+                    numFound =  validAuthors.numFound + validTitles.numFound,
+                    docs = validAuthors.docs + validTitles.docs
                 )
                 _state.value = _state.value.copy(results = resp.docs, loading = false)
             } catch (t: Throwable) {
