@@ -8,5 +8,9 @@
         <item name="cornerSize">16dp</item>
     </style>
 
-    <style name="Theme.RecycleViewSimple" parent="Base.Theme.RecycleViewSimple" />
+    <style name="Theme.RecycleViewSimple" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your theme colors -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorSecondary">@color/teal_200</item>
+    </style>
 </resources>
