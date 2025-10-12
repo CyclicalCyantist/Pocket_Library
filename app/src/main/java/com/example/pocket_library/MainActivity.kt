@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
     private val vm: BookViewModel by viewModels {
-        BookViewModelFactory(AppDatabase.getDatabase(this).bookDao())
+        BookViewModelFactory(BookDatabase.getDatabase(this).bookDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         // Menu navigation
         val collectionButton = findViewById<Button>(R.id.collection_button)
         val libraryButton = findViewById<Button>(R.id.library_button)
+        val addButton = findViewById<Button>(R.id.add_button)
 
         collectionButton.setOnClickListener {
             supportFragmentManager.beginTransaction()
@@ -49,6 +50,13 @@ class MainActivity : AppCompatActivity() {
         libraryButton.setOnClickListener {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.list_container, SearchFragment())
+                .commit()
+        }
+
+        //Add in a condition where it's only visible if user on collection?
+        addButton.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.list_container, DetailFragment())
                 .commit()
         }
 

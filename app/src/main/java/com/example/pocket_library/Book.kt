@@ -20,4 +20,6 @@ data class Book(
 
     @ColumnInfo(name = "book_publication_year")
     val year: Int
+
+    //we need photo, right?
 ): Parcelable

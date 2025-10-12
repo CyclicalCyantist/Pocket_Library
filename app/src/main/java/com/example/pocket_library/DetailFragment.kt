@@ -1,18 +1,45 @@
 package com.example.pocket_library
 
 import android.os.Bundle
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import kotlinx.coroutines.launch
+
 
 class DetailFragment : Fragment() {
     private val vm: BookViewModel by activityViewModels()
+
+    private lateinit var authorInput: EditText
+    private lateinit var titleInput: EditText
+    private lateinit var publicationInput: EditText
+    private lateinit var saveBtn: Button
+
+    private lateinit var db: BookDatabase
+    private lateinit var bookDao: BookDAO
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        db = BookDatabase.getDatabase(requireContext())
+        bookDao = db.bookDao()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,9 +53,45 @@ class DetailFragment : Fragment() {
 
         val imageView = view.findViewById<ImageView>(R.id.itemImage)
         val itemName = view.findViewById<TextView>(R.id.nameTextView)
-        val desc = view.findViewById<TextView>(R.id.detailedDescription)
+        //val desc = view.findViewById<TextView>(R.id.detailedDescription)
         val favBtn = view.findViewById<ImageButton>(R.id.btnFav)
         val backBtn = view.findViewById<ImageButton>(R.id.backBtn)
+
+
+        val bookId = arguments?.getLong("book_id", 0L) ?: 0L
+
+        authorInput = view.findViewById<EditText>(R.id.bookAuthor)
+        titleInput = view.findViewById<EditText>(R.id.bookTitle)
+        publicationInput = view.findViewById<EditText>(R.id.bookPublication)
+        saveBtn = view.findViewById<Button>(R.id.btnSave)
+
+        if (bookId != 0L) {
+            lifecycleScope.launch {
+                val book = bookDao.getBookById(bookId) // you need this DAO method
+                if (book != null) {
+                    // populate your EditText fields
+                    authorInput.setText(book.author)
+                    titleInput.setText(book.title)
+                    publicationInput.setText(book.year.toString())
+                }
+            }
+        }
+
+        saveBtn.setOnClickListener {
+            val author = authorInput.text.toString()
+            val title = titleInput.text.toString()
+            val publish = publicationInput.text.toString().toInt()
+            if (title.isNotEmpty()) {
+                val book = Book(bookId, title, author, publish)
+                lifecycleScope.launch {
+                    bookDao.insert(book)
+                }
+
+            }
+            vm.clearCurrentItem()
+            parentFragmentManager.popBackStack()
+        }
+
 
 //        vm.selectedItemId.observe(viewLifecycleOwner) {
 //            vm.getSelectedItem()?.let { item ->
