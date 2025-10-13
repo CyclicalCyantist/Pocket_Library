@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.collectLatest
 class BookRepository(private val context: Context) {
 
     private val db = FirebaseFirestore.getInstance()
-    private val bookDao = AppDatabase.getDatabase(context).bookDao()
+    private val bookDao = BookDatabase.getDatabase(context).bookDao()
     private var firestoreListener: ListenerRegistration? = null
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 

@@ -13,7 +13,7 @@ import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
     private val vm: BookViewModel by viewModels {
-        BookViewModelFactory(application,AppDatabase.getDatabase(this).bookDao())
+        BookViewModelFactory(application,BookDatabase.getDatabase(this).bookDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
