@@ -1,11 +1,23 @@
 package com.example.pocket_library
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 
-class BookViewModel(private val bookDao: BookDAO) : ViewModel() {
+class BookViewModel(
+    application: Application,
+    private val bookDao: BookDAO) : AndroidViewModel(application) {
+    private val repository = BookRepository(application)
+
+    fun startSync() {
+        repository.startSync()
+    }
+
+    fun stopSync() {
+        repository.stopSync()
+    }
 
     // Connect to database
 //    val books: LiveData<List<Book>> = bookDao.getAllBooks().asLiveData()

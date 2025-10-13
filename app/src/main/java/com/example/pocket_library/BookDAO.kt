@@ -26,7 +26,7 @@ interface BookDAO {
     fun getAllBooks(): Flow<List<Book>>
 
     // Get books by name
-    @Query("SELECT * FROM books WHERE book_title = :bookName")
+    @Query("SELECT * FROM books WHERE title = :bookName")
     suspend fun getBooksByName(bookName: String): List<Book>
 
     // Get book by ID

@@ -12,12 +12,13 @@ data class Book(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
 
-    @ColumnInfo(name = "book_title")
+    @ColumnInfo(name = "title")
     val title: String,
 
-    @ColumnInfo(name = "book_author")
+    @ColumnInfo(name = "author")
     val author: String,
 
-    @ColumnInfo(name = "book_publication_year")
-    val year: Int
+    @ColumnInfo(name = "year")
+    val year: Int,
+
 ): Parcelable

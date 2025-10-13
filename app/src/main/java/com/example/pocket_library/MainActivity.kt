@@ -9,16 +9,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
     private val vm: BookViewModel by viewModels {
-        BookViewModelFactory(AppDatabase.getDatabase(this).bookDao())
+        BookViewModelFactory(application,AppDatabase.getDatabase(this).bookDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        // Initialise Firebase
+        FirebaseApp.initializeApp(this)
 
         // Inset spacing
         findViewById<View?>(R.id.root)?.let { root ->
@@ -108,4 +112,15 @@ class MainActivity : AppCompatActivity() {
             tx.commit()
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        vm.startSync()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        vm.stopSync()
+    }
+
 }
