@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 
 class BookViewModel(
     application: Application,
@@ -20,18 +21,18 @@ class BookViewModel(
     }
 
     // Connect to database
-//    val books: LiveData<List<Book>> = bookDao.getAllBooks().asLiveData()
+   val books: LiveData<List<Book>> = bookDao.getAllBooks().asLiveData()
 
     // Hardcoded test data
-    val books: MutableLiveData<List<Book>> = MutableLiveData<List<Book>>(listOf(
-        Book(title = "Hitchhiker's Guide to the Galaxy", author = "Neil Gaiman", year = 1979),
-        Book(title = "Pride & Prejudice", author = "Jane Austen", year = 1813),
-        Book(title = "Of Mice and Men", author = "John Steinbeck", year = 1937),
-        Book(title = "Metamorphosis", author = "Franz Kafka", year = 1915),
-        Book(title = "Babel", author = "R.F. Kuang", year = 2022),
-        Book(title = "Atomic Habits", author = "James Clear", year = 2018)
-        )
-    )
+//    val books: MutableLiveData<List<Book>> = MutableLiveData<List<Book>>(listOf(
+//        Book(title = "Hitchhiker's Guide to the Galaxy", author = "Neil Gaiman", year = 1979),
+//        Book(title = "Pride & Prejudice", author = "Jane Austen", year = 1813),
+//        Book(title = "Of Mice and Men", author = "John Steinbeck", year = 1937),
+//        Book(title = "Metamorphosis", author = "Franz Kafka", year = 1915),
+//        Book(title = "Babel", author = "R.F. Kuang", year = 2022),
+//        Book(title = "Atomic Habits", author = "James Clear", year = 2018)
+//        )
+//    )
 
     var currentQuery: String = ""
 

@@ -1,24 +1,24 @@
 package com.example.pocket_library
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "books")
-@Parcelize
 data class Book(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
 
     @ColumnInfo(name = "title")
-    val title: String,
+    val title: String = "",
 
     @ColumnInfo(name = "author")
-    val author: String,
+    val author: String = "",
 
     @ColumnInfo(name = "year")
-    val year: Int,
+    val year: Int = 0,
 
-): Parcelable
+    @ColumnInfo(name = "cover")
+    val cover: String? = null
+)

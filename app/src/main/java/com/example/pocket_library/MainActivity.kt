@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        //Add in a condition where it's only visible if user on collection?
+        // Add in a condition where it's only visible if user on collection?
         addButton.setOnClickListener {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.list_container, DetailFragment())

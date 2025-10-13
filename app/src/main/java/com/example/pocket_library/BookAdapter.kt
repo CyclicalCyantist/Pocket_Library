@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
+import coil.load
 
 class BookAdapter(
     private val context: Context,
@@ -32,7 +33,8 @@ class BookAdapter(
 
         holder.textTitle.text = book.title
         holder.textAuthor.text = book.author
-        
+        holder.itemImage.load(book.cover ?: R.mipmap.ic_logo)
+
         holder.itemView.setOnClickListener {
             onItemClick(book)
         }
