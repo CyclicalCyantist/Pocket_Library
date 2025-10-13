@@ -49,6 +49,9 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
+    // View model thing
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4")
+
     // Compose + Coil
     implementation(platform(libs.androidx.compose.bom))
     implementation("io.coil-kt:coil-compose:2.6.0")

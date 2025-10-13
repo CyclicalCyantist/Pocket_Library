@@ -6,6 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class BookViewModel(
     application: Application,
@@ -59,6 +63,12 @@ class BookViewModel(
     fun search(query: String) {
         currentQuery = query
         applyFilters()
+    }
+
+    fun delete(bookId: Long) {
+        viewModelScope.launch {
+            bookDao.deleteById(bookId)
+        }
     }
 
     fun applyFilters(){

@@ -77,6 +77,9 @@ class ListFragment : Fragment() {
             view.context,
             onItemClick = { book ->
                 vm.setCurrentItem(book.id)
+            },
+            onFavouriteClick = { book ->
+                vm.delete(book.id)
             }
         )
         rv.adapter = adapter

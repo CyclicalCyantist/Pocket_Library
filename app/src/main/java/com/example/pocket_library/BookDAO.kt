@@ -30,6 +30,9 @@ interface BookDAO {
     @Query("SELECT * FROM books WHERE title = :bookName")
     suspend fun getBooksByName(bookName: String): List<Book>
 
+    @Query("DELETE FROM books WHERE id = :bookId")
+    suspend fun deleteById (bookId: Long)
+
     // Get book by ID
     @Query("SELECT * FROM books WHERE id = :bookId LIMIT 1")
     suspend fun getBookById(bookId: Long): Book?
