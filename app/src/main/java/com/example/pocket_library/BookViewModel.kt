@@ -45,10 +45,10 @@ class BookViewModel(
     }
     val filteredBooks: LiveData<List<Book>> = _filteredBooks
 
-    private val _selectedItemId = MutableLiveData<Long?>()
-    val selectedItemId: LiveData<Long?> = _selectedItemId
+    private val _selectedItemId = MutableLiveData<String?>()
+    val selectedItemId: LiveData<String?> = _selectedItemId
 
-    fun setCurrentItem(itemId: Long) {
+    fun setCurrentItem(itemId: String) {
         _selectedItemId.value = itemId
     }
 
@@ -65,7 +65,7 @@ class BookViewModel(
         applyFilters()
     }
 
-    fun delete(bookId: Long) {
+    fun delete(bookId: String) {
         viewModelScope.launch {
             val book = bookDao.getBookById(bookId)
             if (book != null){

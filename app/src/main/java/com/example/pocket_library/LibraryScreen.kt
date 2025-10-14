@@ -1,4 +1,5 @@
 package com.example.pocket_library
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -18,12 +19,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 @Preview
 fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
     val state by vm.state.collectAsState()
-    val bookDao = BookDatabase.getDatabase(LocalContext.current).bookDao()
+    val context = LocalContext.current
+    val bookDao = BookDatabase.getDatabase(context).bookDao()
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     Column(Modifier.fillMaxSize().padding(16.dp)) {
@@ -107,19 +110,34 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
                                                 maxLines = 3
                                             )
                                         }
-                                    }
-                                    TextButton({
-                                        scope.launch {
-                                            bookDao.insert(
-                                                Book(
-                                                    title = doc.title,
-                                                    author = doc.authorName.toString(),
-                                                    year = doc.firstPublishYear ?: 0,
-                                                )
-                                            )
+
+                                        Spacer(Modifier.height(4.dp))
+
+                                        Button(
+                                            onClick = {
+                                                scope.launch {
+                                                    bookDao.insert(
+                                                        Book(
+                                                            id = doc.key.replace("/","_"),
+                                                            title = doc.title,
+                                                            author = doc.authorName?.joinToString(", ") ?: "Unknown",
+                                                            year = doc.firstPublishYear ?: 0
+                                                        )
+                                                    )
+                                                    // Show a Toast on the main thread
+                                                    withContext(Dispatchers.Main) {
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Added '${doc.title}' to collection",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                }
+                                            }
+                                        ) {
+                                            Text("Add to Collection")
                                         }
-                                    }) {
-                                        Text("+")
+
                                     }
                                 }
                             }

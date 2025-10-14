@@ -58,21 +58,19 @@ class DetailFragment : Fragment() {
         val backBtn = view.findViewById<ImageButton>(R.id.backBtn)
 
 
-        val bookId = arguments?.getLong("book_id", 0L) ?: 0L
+        val bookId = arguments?.getString("book_id", "") ?: ""
 
         authorInput = view.findViewById<EditText>(R.id.bookAuthor)
         titleInput = view.findViewById<EditText>(R.id.bookTitle)
         publicationInput = view.findViewById<EditText>(R.id.bookPublication)
         saveBtn = view.findViewById<Button>(R.id.btnSave)
 
-        if (bookId != 0L) {
-            lifecycleScope.launch {
-                val book = bookDao.getBookById(bookId) // you need this DAO method
-                if (book != null) {
-                    authorInput.setText(book.author)
-                    titleInput.setText(book.title)
-                    publicationInput.setText(book.year.toString())
-                }
+        lifecycleScope.launch {
+            val book = bookDao.getBookById(bookId)
+            if (book != null) {
+                authorInput.setText(book.author)
+                titleInput.setText(book.title)
+                publicationInput.setText(book.year.toString())
             }
         }
 
