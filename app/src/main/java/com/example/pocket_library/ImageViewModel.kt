@@ -17,6 +17,7 @@ data class UiState(
 
 class ImageViewModel : ViewModel() {
     private val _state = MutableStateFlow(UiState())
+
     val state: StateFlow<UiState> = _state
 
     private var searchJob: Job? = null

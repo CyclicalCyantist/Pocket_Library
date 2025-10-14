@@ -11,12 +11,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 @Preview
 fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
     val state by vm.state.collectAsState()
+    val bookDao = BookDatabase.getDatabase(LocalContext.current).bookDao()
+    val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     Column(Modifier.fillMaxSize().padding(16.dp)) {
         OutlinedTextField(
@@ -99,6 +107,19 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
                                                 maxLines = 3
                                             )
                                         }
+                                    }
+                                    TextButton({
+                                        scope.launch {
+                                            bookDao.insert(
+                                                Book(
+                                                    title = doc.title,
+                                                    author = doc.authorName.toString(),
+                                                    year = doc.firstPublishYear ?: 0,
+                                                )
+                                            )
+                                        }
+                                    }) {
+                                        Text("+")
                                     }
                                 }
                             }
