@@ -67,6 +67,10 @@ class BookViewModel(
 
     fun delete(bookId: Long) {
         viewModelScope.launch {
+            val book = bookDao.getBookById(bookId)
+            if (book != null){
+                repository.deleteFromFirestore(book)
+            }
             bookDao.deleteById(bookId)
         }
     }

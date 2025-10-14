@@ -14,7 +14,7 @@ class BookRepository(private val context: Context) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     fun startSync() {
-        // 1Listen for local changes
+        // Listen for local changes
         scope.launch {
             bookDao.getAllBooks().collectLatest { books ->
                 books.forEach { book ->
@@ -47,4 +47,21 @@ class BookRepository(private val context: Context) {
         firestoreListener?.remove()
         scope.cancel()
     }
+
+    fun deleteFromFirestore(book: Book) {
+        try {
+            db.collection("books")
+                .document(book.id.toString())
+                .delete()
+                .addOnSuccessListener {
+                    println("Deleted ${book.title} from Firestore.")
+                }
+                .addOnFailureListener { e ->
+                    println("Error deleting ${book.title}: ${e.message}")
+                }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 }
