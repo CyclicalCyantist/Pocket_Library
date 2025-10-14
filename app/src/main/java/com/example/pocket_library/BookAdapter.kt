@@ -19,6 +19,7 @@ class BookAdapter(
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textTitle: TextView = view.findViewById(R.id.textName)
         val textAuthor: TextView = view.findViewById(R.id.textCategory)
+        val textYear: TextView = view.findViewById(R.id.textYear)
         val itemImage: ImageView = view.findViewById(R.id.itemImage)
         val btnFav: ImageButton = view.findViewById(R.id.btnFav)
     }
@@ -34,6 +35,7 @@ class BookAdapter(
 
         holder.textTitle.text = book.title
         holder.textAuthor.text = book.author
+        holder.textYear.text = book.year.toString()
         holder.itemImage.load(book.cover ?: R.mipmap.ic_logo)
 
         holder.itemView.setOnClickListener {

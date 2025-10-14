@@ -35,7 +35,7 @@
             android:paddingBottom="10dp"
             android:layout_marginStart="16dp"
             android:text="Name"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -44,7 +44,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="6dp"
-            android:text="Category"/>
+            android:text="Author"/>
+
+        <TextView
+            android:id="@+id/textYear"
+            android:layout_marginStart="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="6dp"
+            android:text="Published:"/>
     </LinearLayout>
 
     <ImageButton
