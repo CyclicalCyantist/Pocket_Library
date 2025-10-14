@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         // Add in a condition where it's only visible if user on collection?
         addButton.setOnClickListener {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.list_container, DetailFragment())
+                .replace(R.id.list_container, EditFragment())
                 .commit()
         }
 
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             replaceIfNeeded(R.id.list_container, ListFragment::class.java)
 
             if (hasSelection) {
-                replaceIfNeeded(R.id.rightPane, DetailFragment::class.java)
+                replaceIfNeeded(R.id.rightPane, EditFragment::class.java)
             } else {
                 supportFragmentManager.findFragmentById(R.id.rightPane)?.let { f ->
                     supportFragmentManager.beginTransaction().remove(f).commit()
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             if (hasSelection) {
-                replaceIfNeeded(R.id.list_container, DetailFragment::class.java, addToBackStack = false)
+                replaceIfNeeded(R.id.list_container, EditFragment::class.java, addToBackStack = false)
             } else {
                 replaceIfNeeded(R.id.list_container, ListFragment::class.java, addToBackStack = false)
             }

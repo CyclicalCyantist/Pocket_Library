@@ -14,7 +14,7 @@ import coil.load
 class BookAdapter(
     private val context: Context,
     private val onItemClick: (Book) -> Unit,
-    private val onFavouriteClick: (Book) -> Unit
+    private val onButtonClick: (Book) -> Unit
 ) : ListAdapter<Book, BookAdapter.ItemViewHolder>(BookDiffCallback()) {
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textTitle: TextView = view.findViewById(R.id.textName)
@@ -41,7 +41,7 @@ class BookAdapter(
         }
 
         holder.btnFav.setOnClickListener {
-            onFavouriteClick(book)
+            onButtonClick(book)
         }
     }
 }

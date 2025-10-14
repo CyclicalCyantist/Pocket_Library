@@ -25,33 +25,6 @@ class ListFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_list, container, false)
 
-        val spinner: Spinner = view.findViewById(R.id.categorySpinner)
-
-        // Converting to Sort By
-        val categories = emptyList<String>()
-
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            categories
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        spinner.adapter = adapter
-
-        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedCategory = categories[position]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-
         val searchView: SearchView = view.findViewById(R.id.searchView)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -77,8 +50,9 @@ class ListFragment : Fragment() {
             view.context,
             onItemClick = { book ->
                 vm.setCurrentItem(book.id)
+                println(book.title)
             },
-            onFavouriteClick = { book ->
+            onButtonClick = { book ->
                 vm.delete(book.id)
             }
         )

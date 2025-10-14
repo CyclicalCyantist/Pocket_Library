@@ -3,13 +3,11 @@ package com.example.pocket_library
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 @Entity(tableName = "books")
 data class Book(
     @PrimaryKey
-    @ColumnInfo(name = "id")
     val id: String = UUID.randomUUID().toString(),
 
     @ColumnInfo(name = "title")
