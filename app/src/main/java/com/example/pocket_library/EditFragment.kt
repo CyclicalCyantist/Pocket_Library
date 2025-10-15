@@ -1,5 +1,6 @@
 package com.example.pocket_library
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,15 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.util.UUID
 
 
@@ -24,15 +30,24 @@ class EditFragment : Fragment() {
     private lateinit var titleInput: EditText
     private lateinit var publicationInput: EditText
     private lateinit var saveBtn: Button
+    private lateinit var cameraBtn: Button
+    private lateinit var imagePreview: ImageView
 
     private lateinit var db: BookDatabase
     private lateinit var bookDao: BookDAO
+    private var imageUri: Uri? = null
 
-    private var bookId: String? = null
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success && imageUri != null) {
+                imagePreview.setImageURI(imageUri)
+            } else {
+                imageUri = null
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         db = BookDatabase.getDatabase(requireContext())
         bookDao = db.bookDao()
     }
@@ -44,14 +59,12 @@ class EditFragment : Fragment() {
     ): View = inflater.inflate(R.layout.fragment_edit, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val linearLayout = view.findViewById<LinearLayout>(R.id.mainLayout)
-        linearLayout.orientation = LinearLayout.HORIZONTAL
-
-        authorInput = view.findViewById<EditText>(R.id.bookAuthor)
-        titleInput = view.findViewById<EditText>(R.id.bookTitle)
-        publicationInput = view.findViewById<EditText>(R.id.bookPublication)
-        saveBtn = view.findViewById<Button>(R.id.btnSave)
-
+        authorInput = view.findViewById(R.id.bookAuthor)
+        titleInput = view.findViewById(R.id.bookTitle)
+        publicationInput = view.findViewById(R.id.bookPublication)
+        saveBtn = view.findViewById(R.id.btnSave)
+        cameraBtn = view.findViewById(R.id.btnCamera)
+        imagePreview = view.findViewById(R.id.preview)
         val backBtn = view.findViewById<ImageButton>(R.id.backBtn)
 
         val selected = vm.getSelectedItem()
@@ -60,23 +73,73 @@ class EditFragment : Fragment() {
         lifecycleScope.launch {
             val book = bookDao.getBookById(bookId)
             if (book != null) {
-                authorInput.setText(book.author)
-                titleInput.setText(book.title)
-                publicationInput.setText(book.year.toString())
+                withContext(Dispatchers.Main) {
+                    authorInput.setText(book.author)
+                    titleInput.setText(book.title)
+                    publicationInput.setText(book.year.toString())
+                    if (book.cover != null) {
+                        imageUri = Uri.parse(book.cover)
+                        imagePreview.setImageURI(imageUri)
+                    }
+                }
             }
         }
 
-        saveBtn.setOnClickListener {
-            val author = authorInput.text.toString()
-            val title = titleInput.text.toString()
-            val publish = publicationInput.text.toString().toInt()
-            if (title.isNotEmpty()) {
-                val book = Book(bookId, title, author, publish, synced = false)
-                lifecycleScope.launch {
-                    bookDao.insert(book)
-                }
+        cameraBtn.setOnClickListener {
+            val photoFile = File(
+                requireContext().filesDir,
+                "cover_${UUID.randomUUID()}.jpg"
+            )
+            imageUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                photoFile
+            )
+            cameraLauncher.launch(imageUri)
+        }
 
+        saveBtn.setOnClickListener {
+            val title = titleInput.text.toString()
+            val author = authorInput.text.toString()
+            val publish = publicationInput.text.toString().toIntOrNull() ?: 0
+
+            if (title.isNotEmpty()) {
+                lifecycleScope.launch {
+                    val book = bookDao.getBookById(bookId)
+                    val coverPath = imageUri?.toString()
+
+                    if (book != null) {
+                        // Delete old cover if replaced
+                        if (book.cover != null && book.cover != coverPath) {
+                            File(Uri.parse(book.cover).path!!).delete()
+                        }
+
+                        // Update existing
+                        bookDao.insert(
+                            book.copy(
+                                title = title,
+                                author = author,
+                                year = publish,
+                                cover = coverPath,
+                                synced = false
+                            )
+                        )
+                    } else {
+                        // Create new
+                        bookDao.insert(
+                            Book(
+                                id = bookId,
+                                title = title,
+                                author = author,
+                                year = publish,
+                                cover = coverPath,
+                                synced = false
+                            )
+                        )
+                    }
+                }
             }
+
             vm.clearCurrentItem()
             parentFragmentManager.popBackStack()
         }

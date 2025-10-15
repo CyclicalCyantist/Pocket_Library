@@ -1,6 +1,7 @@
 package com.example.pocket_library
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
 import coil.load
 import java.io.File
+import androidx.core.net.toUri
 
 class BookAdapter(
     private val context: Context,
@@ -38,9 +40,9 @@ class BookAdapter(
         holder.textAuthor.text = book.author
         holder.textYear.text = book.year.toString()
 
-        // Load local cover if it exists, otherwise fallback placeholder
-        val coverToLoad = book.cover?.let { File(it) } ?: R.mipmap.ic_logo
-        holder.itemImage.load(coverToLoad) {
+        // Load local cover if it exists, otherwise fallback to placeholder
+        holder.itemImage.load(book.cover?.toUri()) {
+            crossfade(true)
             placeholder(R.mipmap.ic_logo)
             error(R.mipmap.ic_logo)
         }

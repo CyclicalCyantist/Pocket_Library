@@ -1,5 +1,6 @@
 package com.example.pocket_library
 import android.content.Context
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,23 +25,22 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
+import java.net.HttpURLConnection
 
-suspend fun downloadCoverImage(context: Context, coverUrl: String, bookId: String): String? {
-    return try {
-        val file = File(context.filesDir, "covers/${bookId}.jpg")
-        file.parentFile?.mkdirs()
 
-        val url = URL(coverUrl)
-        url.openStream().use { input ->
-            FileOutputStream(file).use { output ->
-                input.copyTo(output)
+suspend fun saveCoverImage(context: Context, imageUrl: String, bookId: String): Uri? {
+    return withContext(Dispatchers.IO) {
+        try {
+            val connection = URL(imageUrl).openConnection() as HttpURLConnection
+            connection.inputStream.use { input ->
+                val file = File(context.filesDir, "${bookId}_cover.jpg")
+                file.outputStream().use { output -> input.copyTo(output) }
+                Uri.fromFile(file) // ✅ return as Uri
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
-
-        file.absolutePath // return path to save in Room
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
     }
 }
 
@@ -140,10 +140,10 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
                                             onClick = {
                                                 scope.launch {
                                                     val coverUrl = doc.coverId?.let { "https://covers.openlibrary.org/b/id/${it}-M.jpg" }
-                                                    var localPath: String? = null
+                                                    var coverUri: String? = null
 
                                                     if (coverUrl != null) {
-                                                        localPath = downloadCoverImage(context, coverUrl, doc.key.replace("/", "_"))
+                                                        coverUri = saveCoverImage(context, coverUrl, doc.key.replace("/", "_")).toString()
                                                     }
 
                                                     bookDao.insert(
@@ -152,7 +152,7 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
                                                             title = doc.title,
                                                             author = doc.authorName?.joinToString(", ") ?: "Unknown",
                                                             year = doc.firstPublishYear ?: 0,
-                                                            cover = localPath
+                                                            cover = coverUri
                                                         )
                                                     )
 

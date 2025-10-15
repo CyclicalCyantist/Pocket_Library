@@ -6,18 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import android.content.Context
 import java.io.File
+import androidx.core.net.toUri
 
 class BookViewModel(
     application: Application,
     private val bookDao: BookDAO) : AndroidViewModel(application) {
 
-    private val context = getApplication<Application>()
     private val repository = BookRepository(application)
 
     // Connect to database
@@ -65,12 +62,11 @@ class BookViewModel(
         viewModelScope.launch {
             val book = bookDao.getBookById(bookId)
 
-
             if (book != null){
                 // Delete local cover image
-                val coverFile = File(context.filesDir, "covers/${book.id}.jpg")
-                if (coverFile.exists()) {
-                    coverFile.delete()
+                book.cover?.let {
+                    val file = File(it.toUri().path!!)
+                    if (file.exists()) file.delete()
                 }
 
                 // Delete from firestore

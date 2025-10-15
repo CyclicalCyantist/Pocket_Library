@@ -6,19 +6,16 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BookDAO {
-    // Insert one or more books
+    // Upsert one book
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg book: Book)
 
-    // Update one or more books
-    @Update
-    suspend fun update(vararg book: Book)
-
-    // Delete one or more books
+    // Delete one book
     @Delete
     suspend fun delete(vararg book: Book)
 

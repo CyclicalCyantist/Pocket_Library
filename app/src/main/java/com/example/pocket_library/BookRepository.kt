@@ -20,9 +20,10 @@ class BookRepository(private val context: Context) {
                 books.forEach { book ->
                     if (!book.synced) {
                         val docRef = db.collection("books").document(book.id)
-                        docRef.set(book) // Firestore serializes Book automatically
-                        val unsyncedBook = book.copy(synced = false)
-                        bookDao.insert(unsyncedBook)
+                        val syncedBook = book.copy(synced = true)
+                        docRef.set(syncedBook) // Firestore serializes Book automatically
+                        println("$syncedBook.title uploaded to firebase")
+                        bookDao.insert(syncedBook)
                     }
                 }
             }
@@ -59,7 +60,7 @@ class BookRepository(private val context: Context) {
     fun deleteFromFirestore(book: Book) {
         try {
             db.collection("books")
-                .document(book.id.toString())
+                .document(book.id)
                 .delete()
                 .addOnSuccessListener {
                     println("Deleted ${book.title} from Firestore.")
