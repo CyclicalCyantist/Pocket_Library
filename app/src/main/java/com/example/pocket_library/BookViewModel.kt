@@ -10,19 +10,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import android.content.Context
+import java.io.File
 
 class BookViewModel(
     application: Application,
     private val bookDao: BookDAO) : AndroidViewModel(application) {
+
+    private val context = getApplication<Application>()
     private val repository = BookRepository(application)
-
-    fun startSync() {
-        repository.startSync()
-    }
-
-    fun stopSync() {
-        repository.stopSync()
-    }
 
     // Connect to database
    val books: LiveData<List<Book>> = bookDao.getAllBooks().asLiveData()
@@ -68,7 +64,16 @@ class BookViewModel(
     fun delete(bookId: String) {
         viewModelScope.launch {
             val book = bookDao.getBookById(bookId)
+
+
             if (book != null){
+                // Delete local cover image
+                val coverFile = File(context.filesDir, "covers/${book.id}.jpg")
+                if (coverFile.exists()) {
+                    coverFile.delete()
+                }
+
+                // Delete from firestore
                 repository.deleteFromFirestore(book)
             }
             bookDao.deleteById(bookId)
@@ -89,5 +94,13 @@ class BookViewModel(
         }
 
         _filteredBooks.value = searchFiltered
+    }
+
+    fun startSync() {
+        repository.startSync()
+    }
+
+    fun stopSync() {
+        repository.stopSync()
     }
 }

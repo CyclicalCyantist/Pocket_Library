@@ -18,8 +18,12 @@ class BookRepository(private val context: Context) {
         scope.launch {
             bookDao.getAllBooks().collectLatest { books ->
                 books.forEach { book ->
-                    val docRef = db.collection("books").document(book.id.toString())
-                    docRef.set(book) // Firestore serializes Book automatically
+                    if (!book.synced) {
+                        val docRef = db.collection("books").document(book.id)
+                        docRef.set(book) // Firestore serializes Book automatically
+                        val unsyncedBook = book.copy(synced = false)
+                        bookDao.insert(unsyncedBook)
+                    }
                 }
             }
         }
@@ -36,7 +40,11 @@ class BookRepository(private val context: Context) {
                     val books = snapshot.toObjects(Book::class.java)
                     scope.launch {
                         books.forEach { book ->
-                            bookDao.insert(book)
+                            val inCollection = bookDao.getBookById(book.id)
+                            // Only insert from firebase if local copy doesn't exist
+                            if (inCollection == null) {
+                                bookDao.insert(book)
+                            }
                         }
                     }
                 }

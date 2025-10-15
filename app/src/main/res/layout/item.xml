@@ -16,9 +16,8 @@
         android:id="@+id/itemImage"
         android:src="@mipmap/ic_logo"
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        app:shapeAppearanceOverlay="@style/RoundedImageView" >
+        android:layout_height="150dp"
+        android:scaleType="fitCenter">
     </com.google.android.material.imageview.ShapeableImageView>
 
     <LinearLayout

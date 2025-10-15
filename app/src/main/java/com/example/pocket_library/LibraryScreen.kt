@@ -1,4 +1,5 @@
 package com.example.pocket_library
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +21,28 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
+
+suspend fun downloadCoverImage(context: Context, coverUrl: String, bookId: String): String? {
+    return try {
+        val file = File(context.filesDir, "covers/${bookId}.jpg")
+        file.parentFile?.mkdirs()
+
+        val url = URL(coverUrl)
+        url.openStream().use { input ->
+            FileOutputStream(file).use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        file.absolutePath // return path to save in Room
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
 
 @Composable
 @Preview
@@ -116,15 +139,23 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
                                         Button(
                                             onClick = {
                                                 scope.launch {
+                                                    val coverUrl = doc.coverId?.let { "https://covers.openlibrary.org/b/id/${it}-M.jpg" }
+                                                    var localPath: String? = null
+
+                                                    if (coverUrl != null) {
+                                                        localPath = downloadCoverImage(context, coverUrl, doc.key.replace("/", "_"))
+                                                    }
+
                                                     bookDao.insert(
                                                         Book(
-                                                            id = doc.key.replace("/","_"),
+                                                            id = doc.key.replace("/", "_"),
                                                             title = doc.title,
                                                             author = doc.authorName?.joinToString(", ") ?: "Unknown",
-                                                            year = doc.firstPublishYear ?: 0
+                                                            year = doc.firstPublishYear ?: 0,
+                                                            cover = localPath
                                                         )
                                                     )
-                                                    // Show a Toast on the main thread
+
                                                     withContext(Dispatchers.Main) {
                                                         Toast.makeText(
                                                             context,

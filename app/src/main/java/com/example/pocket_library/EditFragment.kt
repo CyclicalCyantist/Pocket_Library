@@ -71,7 +71,7 @@ class EditFragment : Fragment() {
             val title = titleInput.text.toString()
             val publish = publicationInput.text.toString().toInt()
             if (title.isNotEmpty()) {
-                val book = Book(bookId, title, author, publish)
+                val book = Book(bookId, title, author, publish, synced = false)
                 lifecycleScope.launch {
                     bookDao.insert(book)
                 }

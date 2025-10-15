@@ -20,5 +20,8 @@ data class Book(
     val year: Int = 0,
 
     @ColumnInfo(name = "cover")
-    val cover: String? = null
+    val cover: String? = null,
+
+    @ColumnInfo(name = "synced")
+    val synced: Boolean = true,
 )

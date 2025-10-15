@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
 import coil.load
+import java.io.File
 
 class BookAdapter(
     private val context: Context,
@@ -36,7 +37,13 @@ class BookAdapter(
         holder.textTitle.text = book.title
         holder.textAuthor.text = book.author
         holder.textYear.text = book.year.toString()
-        holder.itemImage.load(book.cover ?: R.mipmap.ic_logo)
+
+        // Load local cover if it exists, otherwise fallback placeholder
+        val coverToLoad = book.cover?.let { File(it) } ?: R.mipmap.ic_logo
+        holder.itemImage.load(coverToLoad) {
+            placeholder(R.mipmap.ic_logo)
+            error(R.mipmap.ic_logo)
+        }
 
         holder.itemView.setOnClickListener {
             onItemClick(book)
