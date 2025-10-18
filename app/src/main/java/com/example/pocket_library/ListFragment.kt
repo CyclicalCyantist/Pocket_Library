@@ -26,12 +26,12 @@ class ListFragment : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                vm.search(query.orEmpty())
+                vm.searchLocal(query.orEmpty())
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                vm.search(newText.orEmpty())
+                vm.searchLocal(newText.orEmpty())
                 return true
             }
         })
