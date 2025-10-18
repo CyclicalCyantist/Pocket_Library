@@ -41,7 +41,9 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val rv = view.findViewById<RecyclerView>(R.id.recyclerView)
-        rv.layoutManager = GridLayoutManager(requireContext(), 1)
+        // Get the span count from our new integer resources
+        val spanCount = resources.getInteger(R.integer.book_list_span_count)
+        rv.layoutManager = GridLayoutManager(requireContext(), spanCount)
 
         adapter = BookAdapter(
             view.context,

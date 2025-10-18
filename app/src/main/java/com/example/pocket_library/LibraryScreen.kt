@@ -95,21 +95,21 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
 
                             Card {
                                 Row(
-                                    modifier = Modifier.height(240.dp),
+                                    modifier = Modifier.fillMaxWidth().height(240.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     AsyncImage(
                                         model = coverUrl,
                                         contentDescription = doc.title,
-                                        contentScale = ContentScale.FillBounds,
+                                        contentScale = ContentScale.Crop, // Changed to prevent stretching
                                         modifier = Modifier
                                             .fillMaxHeight()
-                                            .weight(0.4f)
+                                            .width(160.dp) // Using a fixed width
                                     )
 
                                     Column(
                                         modifier = Modifier
-                                            .weight(0.6f)
+                                            .weight(1f) // Fill remaining space
                                             .padding(horizontal = 16.dp, vertical = 8.dp)
                                     ) {
                                         Text(
