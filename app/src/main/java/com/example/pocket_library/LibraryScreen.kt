@@ -52,7 +52,7 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
     val bookDao = BookDatabase.getDatabase(context).bookDao()
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    Column(Modifier.fillMaxSize().padding(4.dp, 0.dp, 4.dp, 0.dp)) {
         OutlinedTextField(
             value = state.query,
             onValueChange = vm::updateQuery,

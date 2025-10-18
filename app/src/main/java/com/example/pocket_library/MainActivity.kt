@@ -11,15 +11,25 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.FirebaseApp
 
+private const val CURRENT_SCREEN_KEY = "CURRENT_SCREEN_KEY"
+
 class MainActivity : AppCompatActivity() {
     private val vm: BookViewModel by viewModels {
         BookViewModelFactory(application,BookDatabase.getDatabase(this).bookDao())
     }
 
+    // Variable to track the current main screen ("list" or "search")
+    private var currentScreen = "list"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        // Restore the screen state after rotation
+        if (savedInstanceState != null) {
+            currentScreen = savedInstanceState.getString(CURRENT_SCREEN_KEY, "list")
+        }
 
         // Initialise Firebase
         FirebaseApp.initializeApp(this)
@@ -33,34 +43,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Load initial list fragment
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.list_container, ListFragment())
-                .commit()
-        }
-
         // Menu navigation
         val collectionButton = findViewById<Button>(R.id.collection_button)
         val libraryButton = findViewById<Button>(R.id.library_button)
         val addButton = findViewById<Button?>(R.id.add_button)
 
         collectionButton.setOnClickListener { 
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.list_container, ListFragment())
-                .commit()
+            currentScreen = "list"
+            render()
         }
 
         libraryButton.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.list_container, SearchFragment())
-                .commit()
+            currentScreen = "search"
+            render()
         }
 
         // Add in a condition where it's only visible if user on collection?
         addButton?.setOnClickListener { 
             supportFragmentManager.beginTransaction()
                 .replace(R.id.list_container, EditFragment())
+                .addToBackStack(null) // Allow back navigation from edit screen
                 .commit()
         }
 
@@ -71,12 +73,16 @@ class MainActivity : AppCompatActivity() {
 
                 if (rightPane == null && hasSelection) {
                     vm.clearCurrentItem()
-                    render()
+                    // render() will be called by the observer, no need to call it here
                     return
                 }
 
-                isEnabled = false
-                onBackPressedDispatcher.onBackPressed()
+                if (supportFragmentManager.backStackEntryCount > 0) {
+                    supportFragmentManager.popBackStack()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
             }
         })
 
@@ -84,12 +90,24 @@ class MainActivity : AppCompatActivity() {
         render()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Save the current screen state
+        outState.putString(CURRENT_SCREEN_KEY, currentScreen)
+    }
+
     private fun render() {
         val rightPane = findViewById<View?>(R.id.rightPane)
         val hasSelection = vm.getSelectedItem() != null
 
-        if (rightPane != null) {
-            replaceIfNeeded(R.id.list_container, ListFragment::class.java)
+        val mainFragmentClass = if (currentScreen == "search") {
+            SearchFragment::class.java
+        } else {
+            ListFragment::class.java
+        }
+
+        if (rightPane != null) { // Two-pane layout
+            replaceIfNeeded(R.id.list_container, mainFragmentClass)
 
             if (hasSelection) {
                 replaceIfNeeded(R.id.rightPane, EditFragment::class.java)
@@ -98,11 +116,11 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction().remove(f).commit()
                 }
             }
-        } else {
+        } else { // Single-pane layout
             if (hasSelection) {
-                replaceIfNeeded(R.id.list_container, EditFragment::class.java, addToBackStack = false)
+                replaceIfNeeded(R.id.list_container, EditFragment::class.java)
             } else {
-                replaceIfNeeded(R.id.list_container, ListFragment::class.java, addToBackStack = false)
+                replaceIfNeeded(R.id.list_container, mainFragmentClass)
             }
         }
     }
@@ -110,14 +128,13 @@ class MainActivity : AppCompatActivity() {
     private fun replaceIfNeeded(
         containerId: Int,
         fragmentClass: Class<out androidx.fragment.app.Fragment>,
-        addToBackStack: Boolean = false
     ) {
         val fm = supportFragmentManager
         val current = fm.findFragmentById(containerId)
         if (current == null || current::class.java != fragmentClass) {
-            val tx = fm.beginTransaction().replace(containerId, fragmentClass, null)
-            if (addToBackStack) tx.addToBackStack(null)
-            tx.commit()
+            fm.beginTransaction()
+                .replace(containerId, fragmentClass, null)
+                .commit()
         }
     }
 
