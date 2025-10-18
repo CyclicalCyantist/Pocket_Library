@@ -43,9 +43,9 @@ class MainActivity : AppCompatActivity() {
         // Menu navigation
         val collectionButton = findViewById<Button>(R.id.collection_button)
         val libraryButton = findViewById<Button>(R.id.library_button)
-        val addButton = findViewById<Button>(R.id.add_button)
+        val addButton = findViewById<Button?>(R.id.add_button)
 
-        collectionButton.setOnClickListener {
+        collectionButton.setOnClickListener { 
             supportFragmentManager.beginTransaction()
                 .replace(R.id.list_container, ListFragment())
                 .commit()
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Add in a condition where it's only visible if user on collection?
-        addButton.setOnClickListener {
+        addButton?.setOnClickListener { 
             supportFragmentManager.beginTransaction()
                 .replace(R.id.list_container, EditFragment())
                 .commit()

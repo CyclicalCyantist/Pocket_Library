@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -23,14 +24,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="12dp">
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp">
+
+            <Button
+                android:id="@+id/add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Book"
+                app:icon="@drawable/baseline_add_24"
+                app:iconGravity="textStart"
+                app:iconSize="18dp"
+                app:iconTint="@android:color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="6dp">
 
             <Button
                 android:id="@+id/collection_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Collection">
-            </Button>
+                android:text="Collection"
+                app:icon="@drawable/baseline_format_list_bulleted_24"
+                app:iconGravity="textStart"
+                app:iconSize="18dp"
+                app:iconTint="@android:color/white" />
 
             <Space
                 android:layout_width="40dp"
@@ -41,8 +64,11 @@
                 android:id="@+id/library_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Library">
-            </Button>
+                android:text=" Library  "
+                app:icon="@drawable/baseline_search_24"
+                app:iconGravity="textStart"
+                app:iconSize="18dp"
+                app:iconTint="@android:color/white" />
 
         </LinearLayout>
     </LinearLayout>

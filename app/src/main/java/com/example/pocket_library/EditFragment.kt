@@ -9,8 +9,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -22,7 +20,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.UUID
 
-
 class EditFragment : Fragment() {
     private val vm: BookViewModel by activityViewModels()
 
@@ -33,9 +30,9 @@ class EditFragment : Fragment() {
     private lateinit var cameraBtn: Button
     private lateinit var imagePreview: ImageView
 
-    private lateinit var db: BookDatabase
     private lateinit var bookDao: BookDAO
     private var imageUri: Uri? = null
+    private var bookId: String = ""
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
@@ -48,17 +45,33 @@ class EditFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = BookDatabase.getDatabase(requireContext())
-        bookDao = db.bookDao()
+        bookDao = BookDatabase.getDatabase(requireContext()).bookDao()
+
+        if (savedInstanceState != null) {
+            bookId = savedInstanceState.getString("bookId", "")
+            imageUri = savedInstanceState.getParcelable("imageUri")
+        } else {
+            val selected = vm.getSelectedItem()
+            bookId = selected?.id ?: arguments?.getString("book_id") ?: UUID.randomUUID().toString()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("bookId", bookId)
+        outState.putParcelable("imageUri", imageUri)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_edit, container, false)
+    ): View? {
+        return inflater.inflate(R.layout.fragment_edit, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         authorInput = view.findViewById(R.id.bookAuthor)
         titleInput = view.findViewById(R.id.bookTitle)
         publicationInput = view.findViewById(R.id.bookPublication)
@@ -67,8 +80,7 @@ class EditFragment : Fragment() {
         imagePreview = view.findViewById(R.id.preview)
         val backBtn = view.findViewById<ImageButton>(R.id.backBtn)
 
-        val selected = vm.getSelectedItem()
-        val bookId = selected?.id ?: arguments?.getString("book_id") ?: UUID.randomUUID().toString()
+        imageUri?.let { imagePreview.setImageURI(it) }
 
         lifecycleScope.launch {
             val book = bookDao.getBookById(bookId)
@@ -77,7 +89,7 @@ class EditFragment : Fragment() {
                     authorInput.setText(book.author)
                     titleInput.setText(book.title)
                     publicationInput.setText(book.year.toString())
-                    if (book.cover != null) {
+                    if (book.cover != null && imageUri == null) {
                         imageUri = Uri.parse(book.cover)
                         imagePreview.setImageURI(imageUri)
                     }
@@ -86,10 +98,7 @@ class EditFragment : Fragment() {
         }
 
         cameraBtn.setOnClickListener {
-            val photoFile = File(
-                requireContext().filesDir,
-                "cover_${UUID.randomUUID()}.jpg"
-            )
+            val photoFile = File(requireContext().filesDir, "cover_${UUID.randomUUID()}.jpg")
             imageUri = FileProvider.getUriForFile(
                 requireContext(),
                 "${requireContext().packageName}.fileprovider",
@@ -109,12 +118,10 @@ class EditFragment : Fragment() {
                     val coverPath = imageUri?.toString()
 
                     if (book != null) {
-                        // Delete old cover if replaced
                         if (book.cover != null && book.cover != coverPath) {
-                            File(Uri.parse(book.cover).path!!).delete()
+                            runCatching { File(Uri.parse(book.cover).path!!).delete() }
                         }
 
-                        // Update existing
                         bookDao.insert(
                             book.copy(
                                 title = title,
@@ -125,7 +132,6 @@ class EditFragment : Fragment() {
                             )
                         )
                     } else {
-                        // Create new
                         bookDao.insert(
                             Book(
                                 id = bookId,
