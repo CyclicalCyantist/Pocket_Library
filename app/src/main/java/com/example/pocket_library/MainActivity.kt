@@ -1,8 +1,10 @@
 package com.example.pocket_library
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -49,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         val collectionButton = findViewById<Button>(R.id.collection_button)
         val libraryButton = findViewById<Button>(R.id.library_button)
         val addButton = findViewById<Button>(R.id.add_button)
+        val shareButton = findViewById<Button>(R.id.share_button)
 
         collectionButton.setOnClickListener {
             currentScreen = "list"
@@ -63,6 +66,16 @@ class MainActivity : AppCompatActivity() {
         // Add in a condition where it's only visible if user on collection?
         addButton?.setOnClickListener {
             showEditScreen()
+        }
+
+        shareButton?.setOnClickListener {
+            val selectedItem = vm.getSelectedItem()
+            if (selectedItem != null) {
+                val bookSummary = "Check out this book: ${selectedItem.title} by ${selectedItem.author}"
+                shareToContacts(bookSummary)
+            } else {
+                Toast.makeText(this, "Please select a book to share", Toast.LENGTH_SHORT).show()
+            }
         }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -160,6 +173,17 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         vm.stopSync()
+    }
+
+    private fun shareToContacts(bookSummary: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, bookSummary)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
 }
