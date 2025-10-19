@@ -42,7 +42,6 @@ class BookRepository(private val context: Context) {
                     scope.launch {
                         books.forEach { book ->
                             val inCollection = bookDao.getBookById(book.id)
-                            // Only insert from firebase if local copy doesn't exist
                             if (inCollection == null) {
                                 bookDao.insert(book)
                             }

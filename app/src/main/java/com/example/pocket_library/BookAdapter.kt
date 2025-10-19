@@ -40,7 +40,6 @@ class BookAdapter(
         holder.textAuthor.text = book.author
         holder.textYear.text = book.year.toString()
 
-        // Load local cover if it exists, otherwise fallback to placeholder
         holder.itemImage.load(book.cover?.toUri()) {
             crossfade(true)
             placeholder(R.mipmap.ic_logo)

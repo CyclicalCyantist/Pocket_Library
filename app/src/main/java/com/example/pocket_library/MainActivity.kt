@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         BookViewModelFactory(application,BookDatabase.getDatabase(this).bookDao())
     }
 
-    // Variable to track the current main screen ("list" or "search")
     private var currentMainScreen = "list"
     private var currentScreen = "list"
 
@@ -30,15 +29,12 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // Restore the screen state after rotation
         if (savedInstanceState != null) {
             currentScreen = savedInstanceState.getString(CURRENT_SCREEN_KEY, "list")
         }
 
-        // Initialise Firebase
         FirebaseApp.initializeApp(this)
 
-        // Inset spacing
         findViewById<View?>(R.id.root)?.let { root ->
             ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
                 val sb = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -47,7 +43,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Menu navigation
         val collectionButton = findViewById<Button>(R.id.collection_button)
         val libraryButton = findViewById<Button>(R.id.library_button)
         val addButton = findViewById<Button>(R.id.add_button)
@@ -63,7 +58,6 @@ class MainActivity : AppCompatActivity() {
             render()
         }
 
-        // Add in a condition where it's only visible if user on collection?
         addButton?.setOnClickListener {
             showEditScreen()
         }
@@ -85,7 +79,6 @@ class MainActivity : AppCompatActivity() {
 
                 if (rightPane == null && hasSelection) {
                     vm.clearCurrentItem()
-                    // render() will be called by the observer, no need to call it here
                     return
                 }
 
@@ -104,7 +97,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // Save the current screen state
         outState.putString(CURRENT_SCREEN_KEY, currentScreen)
     }
 
@@ -130,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             ListFragment::class.java
         }
 
-        if (rightPane?.visibility == View.VISIBLE) { // Two-pane layout
+        if (rightPane?.visibility == View.VISIBLE) {
             replaceIfNeeded(R.id.list_container, ListFragment::class.java)
             replaceIfNeeded(R.id.rightPane, SearchFragment::class.java)
             libraryButton.visibility = View.GONE
@@ -140,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                 replaceIfNeeded(R.id.list_container, EditFragment::class.java)
             }
 
-        } else { // Single-pane layout
+        } else {
             libraryButton.visibility = View.VISIBLE
             collectionButton.visibility = View.VISIBLE
             if (hasSelection) {

@@ -24,7 +24,6 @@ class ImageViewModel : ViewModel() {
 
     fun updateQuery(q: String) {
         _state.value = _state.value.copy(query = q)
-        // Simple debounce:
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(300)
@@ -45,12 +44,10 @@ class ImageViewModel : ViewModel() {
             try {
                 val validTitles = Network.api.searchBooksByTitle(
                     title = q,
-                    //author = q,
                     perPage = 30
                 )
                 val validAuthors = Network.api.searchBooks(
                     author = q,
-                    //title = q,
                     perPage = 30
                 )
                 val resp = LibraryResponse(

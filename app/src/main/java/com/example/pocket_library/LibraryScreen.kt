@@ -34,7 +34,7 @@ suspend fun saveCoverImage(context: Context, imageUrl: String, bookId: String): 
             connection.inputStream.use { input ->
                 val file = File(context.filesDir, "${bookId}_cover.jpg")
                 file.outputStream().use { output -> input.copyTo(output) }
-                Uri.fromFile(file) // ✅ return as Uri
+                Uri.fromFile(file)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -90,7 +90,7 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
                             val coverUrl = if (doc.coverId != null) {
                                 "https://covers.openlibrary.org/b/id/${doc.coverId}-M.jpg"
                             } else {
-                                null // Coil will show a placeholder/error if the URL is null
+                                null
                             }
 
                             Card {
@@ -101,15 +101,15 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
                                     AsyncImage(
                                         model = coverUrl,
                                         contentDescription = doc.title,
-                                        contentScale = ContentScale.Crop, // Changed to prevent stretching
+                                        contentScale = ContentScale.Crop,
                                         modifier = Modifier
                                             .fillMaxHeight()
-                                            .width(160.dp) // Using a fixed width
+                                            .width(160.dp)
                                     )
 
                                     Column(
                                         modifier = Modifier
-                                            .weight(1f) // Fill remaining space
+                                            .weight(1f)
                                             .padding(horizontal = 16.dp, vertical = 8.dp)
                                     ) {
                                         Text(

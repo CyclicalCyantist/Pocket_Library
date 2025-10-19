@@ -37,7 +37,6 @@ class BookViewModel(
 
     private val repository = BookRepository(application)
 
-    // --- LiveData for local collection --- (ListFragment, EditFragment)
     val books: LiveData<List<Book>> = bookDao.getAllBooks().asLiveData()
     private val _filteredBooks = MediatorLiveData<List<Book>>().apply {
         addSource(books) { applyFilters() }
@@ -47,12 +46,10 @@ class BookViewModel(
     val selectedItemId: LiveData<String?> = _selectedItemId
     var localSearchQuery: String = ""
 
-    // --- StateFlow for network search --- (SearchFragment / LibraryScreen)
     private val _networkState = MutableStateFlow(NetworkUiState())
     val networkState: StateFlow<NetworkUiState> = _networkState
     private var searchJob: Job? = null
 
-    // --- Methods for local collection --- 
     fun setCurrentItem(itemId: String) {
         _selectedItemId.value = itemId
     }
@@ -98,7 +95,6 @@ class BookViewModel(
         _filteredBooks.value = searchFiltered
     }
 
-    // --- Methods for network search & adding books ---
     fun updateNetworkQuery(q: String) {
         _networkState.value = _networkState.value.copy(query = q)
         searchJob?.cancel()
@@ -175,7 +171,6 @@ class BookViewModel(
         }
     }
 
-    // --- Firestore Sync --- 
     fun startSync() {
         repository.startSync()
     }
