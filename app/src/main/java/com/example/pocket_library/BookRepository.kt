@@ -15,19 +15,19 @@ class BookRepository(private val context: Context) {
 
     fun startSync() {
         // Listen for local changes
-        scope.launch {
-            bookDao.getAllBooks().collectLatest { books ->
-                books.forEach { book ->
-                    if (!book.synced) {
-                        val docRef = db.collection("books").document(book.id)
-                        val syncedBook = book.copy(synced = true)
-                        docRef.set(syncedBook) // Firestore serializes Book automatically
-                        println("$syncedBook.title uploaded to firebase")
-                        bookDao.insert(syncedBook)
-                    }
-                }
-            }
-        }
+//        scope.launch {
+//            bookDao.getAllBooks().collectLatest { books ->
+//                books.forEach { book ->
+//                    if (!book.synced) {
+//                        val docRef = db.collection("books").document(book.id)
+//                        val syncedBook = book.copy(synced = true)
+//                        docRef.set(syncedBook) // Firestore serializes Book automatically
+//                        println("$syncedBook.title uploaded to firebase")
+//                        bookDao.insert(syncedBook)
+//                    }
+//                }
+//            }
+//        }
 
         // Listen for remote changes
         firestoreListener = db.collection("books")

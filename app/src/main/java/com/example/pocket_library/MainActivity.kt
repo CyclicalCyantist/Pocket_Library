@@ -98,6 +98,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun render() {
         val rightPane = findViewById<View?>(R.id.rightPane)
+        val collectionButton = findViewById<Button>(R.id.collection_button)
+        val libraryButton = findViewById<Button>(R.id.library_button)
+
         val hasSelection = vm.getSelectedItem() != null
 
         val mainFragmentClass = if (currentScreen == "search") {
@@ -107,21 +110,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (rightPane != null) { // Two-pane layout
-            replaceIfNeeded(R.id.list_container, mainFragmentClass)
+            replaceIfNeeded(R.id.list_container, ListFragment::class.java)
+            replaceIfNeeded(R.id.rightPane, SearchFragment::class.java)
+            libraryButton.visibility = View.GONE
+            collectionButton.visibility = View.GONE
 
-            if (hasSelection) {
-                replaceIfNeeded(R.id.rightPane, EditFragment::class.java)
-            } else {
-                supportFragmentManager.findFragmentById(R.id.rightPane)?.let { f ->
-                    supportFragmentManager.beginTransaction().remove(f).commit()
-                }
-            }
         } else { // Single-pane layout
+            libraryButton.visibility = View.VISIBLE
             if (hasSelection) {
                 replaceIfNeeded(R.id.list_container, EditFragment::class.java)
             } else {
                 replaceIfNeeded(R.id.list_container, mainFragmentClass)
             }
+
         }
     }
 
