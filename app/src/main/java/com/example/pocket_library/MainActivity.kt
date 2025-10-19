@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         shareButton?.setOnClickListener {
             val selectedItem = vm.getSelectedItem()
             if (selectedItem != null) {
-                val bookSummary = "Check out this book: ${selectedItem.title} by ${selectedItem.author}"
+                val bookSummary = "Check out this book: ${selectedItem.title} by ${selectedItem.author} in ${selectedItem.year}"
                 shareToContacts(bookSummary)
             } else {
                 Toast.makeText(this, "Please select a book to share", Toast.LENGTH_SHORT).show()
