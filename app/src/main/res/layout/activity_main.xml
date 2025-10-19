@@ -37,6 +37,21 @@
             app:iconSize="18dp"
             app:iconTint="@android:color/white" />
 
+        <Space
+            android:layout_width="40dp"
+            android:layout_height="match_parent">
+        </Space>
+
+        <Button
+            android:id="@+id/share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="    Share   "
+            app:icon="@drawable/baseline_share_24"
+            app:iconGravity="textStart"
+            app:iconSize="18dp"
+            app:iconTint="@android:color/white" />
+
     </LinearLayout>
 
     <LinearLayout
