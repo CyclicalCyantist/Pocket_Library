@@ -67,6 +67,6 @@
         android:layout_marginRight="6dp"
         android:layout_gravity="center"
         android:background="@android:color/transparent"
-        android:src="@drawable/one_star_outline_icon"
+        android:src="@drawable/outline_delete_24"
         />
 </LinearLayout>
