@@ -19,7 +19,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Variable to track the current main screen ("list" or "search")
+    private var currentMainScreen = "list"
     private var currentScreen = "list"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         val libraryButton = findViewById<Button>(R.id.library_button)
         val addButton = findViewById<Button?>(R.id.add_button)
 
-        collectionButton.setOnClickListener { 
+        collectionButton.setOnClickListener {
             currentScreen = "list"
             render()
         }
@@ -59,11 +61,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Add in a condition where it's only visible if user on collection?
-        addButton?.setOnClickListener { 
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.list_container, EditFragment())
-                .addToBackStack(null) // Allow back navigation from edit screen
-                .commit()
+        addButton?.setOnClickListener {
+            showEditScreen()
         }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -96,6 +95,10 @@ class MainActivity : AppCompatActivity() {
         outState.putString(CURRENT_SCREEN_KEY, currentScreen)
     }
 
+    private fun showEditScreen() {
+        replaceIfNeeded(R.id.list_container, EditFragment::class.java)
+    }
+
     private fun render() {
         val rightPane = findViewById<View?>(R.id.rightPane)
         val collectionButton = findViewById<Button>(R.id.collection_button)
@@ -103,13 +106,18 @@ class MainActivity : AppCompatActivity() {
 
         val hasSelection = vm.getSelectedItem() != null
 
-        val mainFragmentClass = if (currentScreen == "search") {
+        if (currentScreen != "edit") {
+            currentMainScreen = currentScreen
+        }
+
+
+        val mainFragmentClass = if (currentMainScreen == "search") {
             SearchFragment::class.java
         } else {
             ListFragment::class.java
         }
 
-        if (rightPane != null) { // Two-pane layout
+        if (rightPane?.visibility == View.VISIBLE) { // Two-pane layout
             replaceIfNeeded(R.id.list_container, ListFragment::class.java)
             replaceIfNeeded(R.id.rightPane, SearchFragment::class.java)
             libraryButton.visibility = View.GONE
@@ -117,6 +125,7 @@ class MainActivity : AppCompatActivity() {
 
         } else { // Single-pane layout
             libraryButton.visibility = View.VISIBLE
+            collectionButton.visibility = View.VISIBLE
             if (hasSelection) {
                 replaceIfNeeded(R.id.list_container, EditFragment::class.java)
             } else {
