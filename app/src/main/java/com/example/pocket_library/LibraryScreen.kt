@@ -4,6 +4,9 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -81,8 +84,10 @@ fun LibrarySearchScreen(vm: ImageViewModel = viewModel()) {
                     Text("No results", modifier = Modifier.align(Alignment.Center))
                 }
                 else -> {
-                    LazyColumn(
+                    LazyVerticalGrid (
+                        columns = GridCells.Adaptive(300.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(bottom = 16.dp)
                     ) {

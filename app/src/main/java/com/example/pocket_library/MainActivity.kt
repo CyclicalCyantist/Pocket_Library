@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         // Menu navigation
         val collectionButton = findViewById<Button>(R.id.collection_button)
         val libraryButton = findViewById<Button>(R.id.library_button)
-        val addButton = findViewById<Button?>(R.id.add_button)
+        val addButton = findViewById<Button>(R.id.add_button)
 
         collectionButton.setOnClickListener {
             currentScreen = "list"
@@ -122,6 +122,10 @@ class MainActivity : AppCompatActivity() {
             replaceIfNeeded(R.id.rightPane, SearchFragment::class.java)
             libraryButton.visibility = View.GONE
             collectionButton.visibility = View.GONE
+
+            if (hasSelection) {
+                replaceIfNeeded(R.id.list_container, EditFragment::class.java)
+            }
 
         } else { // Single-pane layout
             libraryButton.visibility = View.VISIBLE
